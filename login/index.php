@@ -8,13 +8,13 @@
 
 <body>
 	<div class="container">  
-		<form id="contact" action="" method="post">
+            <form id="contact" action="loginController.php" method="post">
 			<center><h2>Login</h2></center>
 			<fieldset>
-				<input placeholder="Username" type="text" tabindex="1" required autofocus>
+                            <input placeholder="Username" name="uname" type="text" tabindex="1" required autofocus>
 			</fieldset>
 			<fieldset>
-				<input placeholder="Password" type="password" tabindex="2" required>
+                            <input placeholder="Password" name="pwd" type="password" tabindex="2" required>
 			</fieldset>
 			
 			<fieldset>

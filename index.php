@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+    header('Location: login/index.php');
+}
+?>
+
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -11,7 +18,9 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        // put your code here
+        $user = $_SESSION['user'];
+        echo "Login Successful!\n Welcome $user";
         ?>
+        <a href="login/logout.php">Logout</a>
     </body>
 </html>

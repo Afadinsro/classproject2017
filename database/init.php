@@ -196,29 +196,26 @@ function update($valueArray, $key, $table, $column, $types, $dbCon) {
 }
 
 /**
- *
- * @param type $key
- * @param type $table
- * @param type $column
- * @param type $types
- * @param type $dbCon
- * @return type
+  * Selects a column iFrom a specified table
+ * Allows select from useraccount table
+ * @param type $key The key that determines which record to update.
+ * @param type $table The table to select from.
+ * @param type $columns An array with the column to choose from and column for where clause
+ * @param type $types A string representation of the data type of the key for update
+ * @param type $dbCon A database connection
  */
-function select($key, $table, $column, $types, $dbCon) {
-    $result;
-    $out_uname;
-    $out_gend;
-    $out_out;
+function select($key, $table, $columns, $types, $dbCon) {
+    $arrayLength = sizeof($columns);
     $output = array();
+    $passwd = NULL;
 
     //check if connection was succesful
     if (connected($dbCon)) {
         //prepare an sql statement
-        $prepStatement;
-        if ($table == 'webtechlogin') {
-            $prepStatement = mysqli_prepare($dbCon, "SELECT $column FROM $table WHERE username = ?");
+        $prepStatement = NULL;
+        if ($arrayLength == 2) {
+            $prepStatement = mysqli_prepare($dbCon, "SELECT $columns[0] FROM $table WHERE $columns[1] = ?");
         }
-
 
         //check if prepared statement was successful
         if ($prepStatement) {

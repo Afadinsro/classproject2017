@@ -76,6 +76,7 @@ fieldset {
   background: #FFF;
   margin: 0 0 5px;
   padding: 10px;
+  border-radius: 4px;
 }
 
 #contact input[type="text"]:hover,
@@ -125,6 +126,7 @@ fieldset {
 #contact textarea:focus {
   outline: 0;
   border: 1px solid #aaa;
+  box-shadow: 0 0 10px lightslategray;
 }
 
 ::-webkit-input-placeholder {
