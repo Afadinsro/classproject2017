@@ -34,10 +34,6 @@ function connectToDB($database) {
     if (mysqli_connect_errno()) {
         die('Connection failed: ' . mysqli_connect_error());
     }
-    /* else{
-      echo "connection successful";
-      } */
-
     return $con;
 }
 
@@ -147,7 +143,7 @@ function update($valueArray, $key, $table, $column, $types, $dbCon) {
     //check if connection was succesful
     if (connected($dbCon)) {
         //prepare an sql statement
-        $prepStatement;
+        $prepStatement = NULL;
 
         //For webtechlogin
         if ($table == 'webtechlogin') {
@@ -196,7 +192,7 @@ function update($valueArray, $key, $table, $column, $types, $dbCon) {
 }
 
 /**
-  * Selects a column iFrom a specified table
+  * Selects a column from a specified table
  * Allows select from useraccount table
  * @param type $key The key that determines which record to update.
  * @param type $table The table to select from.
@@ -233,6 +229,34 @@ function select($key, $table, $columns, $types, $dbCon) {
     return $output;
 }
 
+function fetchMajors($dbCon) {
+    $result = NULL;
+    if(!connected($dbCon)){
+        die();
+    }
+    $prepStatement = mysqli_prepare($dbCon, "SELECT majorname FROM allmajor WHERE majorid != 99");
+    
+    //execute prepared statement
+    if($prepStatement){
+        mysqli_stmt_execute($prepStatement);
+        $result = mysqli_stmt_get_result($prepStatement);
+    }
+    
+    return $result;
+}
+
+
+function getUserDetails(){
+    
+}
+
+/**
+ * 
+ * @param type $key
+ * @param type $table
+ * @param type $dbCon
+ * @return type
+ */
 function getAllUsernames($key, $table, $dbCon){
     $result = NULL;
     $searchTerm = "%" . $keyword . "%";
@@ -290,7 +314,10 @@ function search($keyword, $table, $column, $types, $dbCon) {
   ---------------------------------------------------------------------- */
 
 function exists($session) {
-
+    if(isset($session)){
+        return TRUE;
+    }
+    return FALSE; 
 }
 
 /**

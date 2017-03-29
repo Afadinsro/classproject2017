@@ -3,10 +3,9 @@
     <head>
         <title>Register</title>
         <meta charset="UTF-8"> 
-        <link rel="stylesheet" href="../css/loginstyle.css"> 
-        <script type="text/javascript" src="../js/registration.js"></script>
+        <link rel="stylesheet" href="../css/loginstyle.css">
     </head>
-    <body>
+
 
     <body>
         <div class="container">  
@@ -39,6 +38,7 @@
                     <select name="major" id="majorSelect">
                         <option>Major...</option>
                         <!-- Load from database -->
+                        <?php include 'majors_dropdown.php'; ?>
                     </select>
                 </fieldset>
 
@@ -50,21 +50,7 @@
         </div>
 
 
+        <!-- load javascript -->
+        <script type="text/javascript" src="../js/registration.js"></script>
     </body>
-    //form
-    //username text length
-    //fullname text length
-    //password text password
-    //email text email 
-    //tel text length
-    //gender radio
-    //major dropdown - BA, MIS, CS, ENG
-    //Course dropdown - Based on top selection AJAX
-    List about 5 courses, select 3
-    //permission - hidden field
-    //status - active / inactive
-    //submit
-    //validation - javascript & php
-    //insert to database
-</body>
 </html>

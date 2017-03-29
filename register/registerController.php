@@ -6,6 +6,7 @@
  * and open the template in the editor.
  */
 require '../database/init.php';
+require 'form_validation.php';
 
 //connect to database
 $db = 'cproject';
@@ -29,7 +30,7 @@ $connection = connectToDB($db);
 if (connected($connection)) {
     //get variables
     if(isset($_POST['submit'])) {
-        $username = $_POST['uname'];
+        $username = strlen($_POST['uname']) > 0 ? $_POST['uname']: '';
         $password = $_POST['pword'];
         $fname = $_POST['fname'];
         $lname = $_POST['lname'];
