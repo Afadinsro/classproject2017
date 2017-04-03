@@ -15,12 +15,14 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
+        <link rel="stylesheet" type="text/css" href="css/header_style.css">
     </head>
     <body>
         <?php
+        include 'layout/header.php';
+        
         $user = $_SESSION['user'];
         echo "Login Successful!\n Welcome $user";
         ?>
-        <a href="login/logout.php">Logout</a>
     </body>
 </html>

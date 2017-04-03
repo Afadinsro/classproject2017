@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 require '../database/init.php';
-require 'form_validation.php';
+require '../unsecure/form_validation.php';
 
 //connect to database
 $db = 'cproject';
@@ -43,3 +43,32 @@ if (connected($connection)) {
     }
 }
 
+/**
+ * Registers a new user of the system
+ * @global User $user
+ * @param User $user A user object to add
+ * @return boolean True upon successful registration and false if otherwise
+ */
+function register($user) {
+    $success = FALSE;
+    $con = connectToDB('cproject');
+    $array = $user->toArray();
+    $types = getTypes($array);
+    
+    if(connected($con)){
+        global $user;
+        //prepare an sql statement
+        //because double quotes are used, the values of variables are used. No concatenation needed.
+        $prepStatement = mysqli_prepare($con, "INSERT INTO useraccount(username, pwd, fname, lname, email, gender, major_id, userstatus, per_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        //check if prepared statement was successful
+        if ($prepStatement) {
+            //bind parameters
+            mysqli_stmt_bind_param($prepStatement, $types, $user->username, $user->getPassword(), $user->fname, $user->lname, $user->getEmail(), $user->gender, $user->major_id, $user->status, $user->per_id);
+            //execute prepared statement
+            $success = mysqli_stmt_execute($prepStatement);
+        }
+        //close prepared statement
+        mysqli_stmt_close($prepStatement);
+    }
+    return $success;
+}

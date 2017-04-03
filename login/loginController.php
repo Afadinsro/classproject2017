@@ -5,11 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-if (file_exists('../database/init.php')) {
-    require '../database/init.php';
-} else {
-    die("Error: File 'init.php' does not exist.");
-}
+
+require '../database/init.php';
+require '../classes/User.php';
 
 $username = '';
 $password = '';

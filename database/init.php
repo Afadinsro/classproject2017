@@ -8,15 +8,15 @@ define('USERNAME', 'root');
 define('PASSWORD', '');
 define('SERVER', 'localhost');
 define('CLASS_DATABASE', 'webtechclass');
-define('LAB_DATABASE', 'webtechclass');
+define('LAB_DATABASE', 'lab');
 define('CPROJECT_DATABASE', 'classproject2017');
 
 /**
  * Creates a database connection and returns it.
- * @param type $database Database to connect to
- * @return \mysqli A database connection
+ * @param string $database Database to connect to
+ * @return mysqli A database connection
  */
-function connectToDB($database) {
+function connectToDB(string $database) {
     //create connection
     switch ($database) {
         case 'class':
@@ -39,10 +39,10 @@ function connectToDB($database) {
 
 /**
  * Checks if a connection to a database exists
- * @param type $dbCon A database connection
+ * @param mysqli $dbCon A database connection
  * @return boolean True if connection exists, and false if otherwise
  */
-function connected($dbCon) {
+function connected(mysqli $dbCon) {
     if ($dbCon) {
         return true;
     } else {
@@ -82,10 +82,10 @@ function insert($valueArray, $table, $columnArray, $types, $dbCon) {
 
 /**
  * Gets a string representation of the data types of the values to insert
- * @param type $valueArray An array of values to insert into a database
+ * @param string $valueArray An array of values to insert into a database
  * @return string A string representation of the data types of the values to insert
  */
-function getTypes($valueArray) {
+function getTypes(array $valueArray) {
     $typeString = '';
     //get type for each element of array
     foreach ($valueArray as $value) {
@@ -139,7 +139,7 @@ function delete($key, $table, $column, $types, $dbCon) {
  * @param type $types A string representation of the data type of the key for update
  * @param type $dbCon A database connection
  */
-function update($valueArray, $key, $table, $column, $types, $dbCon) {
+function update(array $valueArray, $key, $table, $column, $types, $dbCon) {
     //check if connection was succesful
     if (connected($dbCon)) {
         //prepare an sql statement
@@ -229,54 +229,31 @@ function select($key, $table, $columns, $types, $dbCon) {
     return $output;
 }
 
-function fetchMajors($dbCon) {
+
+
+
+function selectUser(string $username){
     $result = NULL;
-    if(!connected($dbCon)){
+    $dbCon = connectToDB('cproject');
+    $types = 's';
+
+    if (!connected($dbCon)) {
         die();
     }
-    $prepStatement = mysqli_prepare($dbCon, "SELECT majorname FROM allmajor WHERE majorid != 99");
-    
-    //execute prepared statement
-    if($prepStatement){
+    $prepStatement = mysqli_prepare($dbCon, "SELECT username, fname, lname, password, email, gender, major_id, per_id FROM useraccount WHERE username = ?");
+
+    if ($prepStatement) {
+        //bind parameters
+        mysqli_stmt_bind_param($prepStatement, $types, $username);
+        //execute prepared statement
         mysqli_stmt_execute($prepStatement);
         $result = mysqli_stmt_get_result($prepStatement);
     }
-    
+
     return $result;
+
 }
 
-
-function getUserDetails(){
-    
-}
-
-/**
- * 
- * @param type $key
- * @param type $table
- * @param type $dbCon
- * @return type
- */
-function getAllUsernames($key, $table, $dbCon){
-    $result = NULL;
-    $searchTerm = "%" . $keyword . "%";
-    //check if connection was succesful
-    if (connected($dbCon)) {
-        //prepare an sql statement
-        $prepStatement = mysqli_prepare($dbCon, "SELECT username FROM $table WHERE $column LIKE ?");
-
-        //check if prepared statement was successful
-        if ($prepStatement) {
-            //bind parameters
-            mysqli_stmt_bind_param($prepStatement, $types, $searchTerm);
-
-            //execute prepared statement
-            mysqli_stmt_execute($prepStatement);
-            $result = mysqli_stmt_get_result($prepStatement);
-        }
-    }
-    return $result;
-}
 
 /**
  * Searches the database for values similar to the keyword entered.
@@ -323,11 +300,11 @@ function exists($session) {
 /**
  * Checks if a password entered by user matches that of the correct password
  * in the database.
- * @param type $password Password entered by the user
- * @param type $correctPassword Correct password in the database
+ * @param string $password Password entered by the user
+ * @param string $correctPassword Correct password in the database
  * @return boolean Returns true if it matches, and false otherwise.
  */
-function authenticate($password, $correctPassword) {
+function authenticate(string $password, string $correctPassword) {
     //verify password using password_verify()
     $matches = password_verify($password, $correctPassword);
     //return true if it matches or false if otherwise

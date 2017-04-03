@@ -27,7 +27,7 @@
                     <input placeholder="Email" id="email" name="email" type="email" tabindex="5" required onblur="validateEmail()">
                 </fieldset>
                 <fieldset>
-                    <select name="gender" id="genderSelect">
+                    <select name="gender" id="genderSelect" onblur="validateGender()">
                         <option>Gender..</option>
                         <option value="M">Male</option>
                         <option value="F">Female</option>
@@ -35,10 +35,10 @@
                 </fieldset>
 
                 <fieldset>
-                    <select name="major" id="majorSelect">
-                        <option>Major...</option>
+                    <select name="major" id="majorSelect" onblur="validateMajor()">
+                        <option>Select a major...</option>
                         <!-- Load from database -->
-                        <?php include 'majors_dropdown.php'; ?>
+                        <?php include '../unsecure/load_majors.php'; ?>
                     </select>
                 </fieldset>
 
@@ -51,6 +51,6 @@
 
 
         <!-- load javascript -->
-        <script type="text/javascript" src="../js/registration.js"></script>
+        <script type="text/javascript" src="../js/registration_validation.js"></script>
     </body>
 </html>
