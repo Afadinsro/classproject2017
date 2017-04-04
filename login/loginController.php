@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-require '../unsecure/retrieval_functions.php';
+require dirname(__FILE__).'/../unsecure/retrieval_functions.php';
 require dirname(__FILE__)."/../classes/User.php";
 
 $username = '';
@@ -17,17 +17,18 @@ if (isset($_POST['submit'])) {
     $username = $_POST['uname'];
     $password = $_POST['pwd'];
 
-    $result = selectUser($username);
+    $user_record = selectUser('admin');
     
-    foreach ($result as $value) {
+    echo $user_record['pwd'];
+    /*foreach ($result as $value) {
         echo '**  '.$value['username'];
-    }
+    }*/
 
-    if (!$result || $result != NULL) {
+    if (!$user_record) {
         //username does not exist
         echo "Username: $username does not exist";
     } else {
-        $user_record = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        
         
         $correctPass = $user_record['pwd'];
         echo $user_record['pwd'];
@@ -38,7 +39,8 @@ if (isset($_POST['submit'])) {
             //create a user object to use as a session variable
             //use password that the user typed, not the one from the database 
             $user = new User($user_record['username'], $user_record['fname'], $user_record['lname'], $password, $user_record['email'], $user_record['gender'], $user_record['major_id'], $user_record['per_id']);
-            $user->display();
+            
+            //$user->display();
             
             
             

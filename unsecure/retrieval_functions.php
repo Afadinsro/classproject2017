@@ -27,6 +27,9 @@ function getEmails() {
         mysqli_stmt_execute($prepStatement);
         $result = mysqli_stmt_get_result($prepStatement);
     }
+    //close resources
+    mysqli_stmt_close($prepStatement);
+    mysqli_close($dbCon);
 
     return $result;
 }
@@ -50,6 +53,9 @@ function getUsernames() {
         mysqli_stmt_execute($prepStatement);
         $result = mysqli_stmt_get_result($prepStatement);
     }
+    //close resources
+    mysqli_stmt_close($prepStatement);
+    mysqli_close($dbCon);
 
     return $result;
 }
@@ -73,6 +79,9 @@ function fetchMajors() {
         mysqli_stmt_execute($prepStatement);
         $result = mysqli_stmt_get_result($prepStatement);
     }
+    //close resources
+    mysqli_stmt_close($prepStatement);
+    mysqli_close($dbCon);
 
     return $result;
 }
@@ -95,6 +104,9 @@ function getMajors() {
         mysqli_stmt_execute($prepStatement);
         $result = mysqli_stmt_get_result($prepStatement);
     }
+    //close resources
+    mysqli_stmt_close($prepStatement);
+    mysqli_close($dbCon);
 
     return $result;
 }
@@ -117,6 +129,9 @@ function getPermissions() {
         mysqli_stmt_execute($prepStatement);
         $result = mysqli_stmt_get_result($prepStatement);
     }
+    //close resources
+    mysqli_stmt_close($prepStatement);
+    mysqli_close($dbCon);
 
     return $result;
 }
@@ -124,7 +139,7 @@ function getPermissions() {
 /**
  * 
  * @param string $username
- * @return array
+ * @return array An assoc array with the selected record
  */
 function selectUser(string $username){
     $result = NULL;

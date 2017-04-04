@@ -18,8 +18,8 @@ define('FACULTY_PERMISSION', 3);
 define('ADMIN_PERMISSION', 1);
 define('DEFAULT_PASSWORD', 'mydefault');
 define('DEFAULT_NAME', 'default');
-define('DEFAULT_EMAIL', 'ACTIVE');
-define('DEFAULT_GENDER', 'ACTIVE');
+define('DEFAULT_EMAIL', 'default@email.com');
+define('DEFAULT_GENDER', 'M');
 define('DEFAULT_MAJOR', 1);
 
 
@@ -110,7 +110,19 @@ class User implements Serializable {
         return $array;
     }
 
-    private function is_valid(string $username, string $fname, string $lname, string $pwd, string $email, string $gend, int $major_id, int $per_id) {
+    /**
+     * 
+     * @param string $username
+     * @param string $fname
+     * @param string $lname
+     * @param string $pwd
+     * @param string $email
+     * @param string $gend
+     * @param int $major_id
+     * @param int $per_id
+     * @return boolean
+     */
+    public static function is_valid(string $username, string $fname, string $lname, string $pwd, string $email, string $gend, int $major_id, int $per_id) {
         $valid = FALSE;
         //username should not exist i.e unique
         //password should match regex
@@ -121,11 +133,19 @@ class User implements Serializable {
         //fname, lname & username should be strings and should only contain letters
         
 
-        if ($this->username_exists($username) == FALSE && $this->valid_username($username) == TRUE 
+        /*if ($this->username_exists($username) == FALSE && $this->valid_username($username) == TRUE 
                 && validatePassword($pwd) == TRUE && $this->email_exists($email) == FALSE 
                 && validateEmail($email) == TRUE && $this->major_exists($major_id) == TRUE 
                 && $this->per_exists($per_id) == TRUE && $this->valid_gender($gend) == TRUE 
                 && $this->valid_fname($fname) == TRUE && $this->valid_lname($lname) == TRUE) {
+            $valid = TRUE;
+        }*/
+        
+        if (User::username_exists($username) == FALSE && User::valid_username($username) == TRUE 
+                && validatePassword($pwd) == TRUE && User::email_exists($email) == FALSE 
+                && validateEmail($email) == TRUE && User::major_exists($major_id) == TRUE 
+                && User::per_exists($per_id) == TRUE && User::valid_gender($gend) == TRUE 
+                && User::valid_fname($fname) == TRUE && User::valid_lname($lname) == TRUE) {
             $valid = TRUE;
         }
         
@@ -170,6 +190,17 @@ class User implements Serializable {
             }
         }
         return $success;
+    }
+    
+    public function test($username) {
+        switch ($this->username_exists($username)) {
+            case TRUE:
+                echo 'username exists';
+                break;
+            case FALSE:
+                echo 'username exists';
+                break;
+        }
     }
 
     /**
@@ -356,4 +387,3 @@ class User implements Serializable {
         return $new_user;
     }
 }
-
