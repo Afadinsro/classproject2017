@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION['user']) || empty($_SESSION['user'])) {
+if (!isset($_SESSION['suser']) || empty($_SESSION['suser'])) {
     header('Location: login/index.php');
 }
 ?>
@@ -20,9 +20,16 @@ and open the template in the editor.
     <body>
         <?php
         include 'layout/header.php';
+        require_once dirname(__FILE__).'/classes/User.php';
         
-        $user = $_SESSION['user'];
-        echo "Login Successful!\n Welcome $user";
+        $temp = User::getDefault();
+        $unseri = $temp->unserialize($_SESSION['suser']); 
+        
+        $user = User::init($unseri);
+        //var_dump($user);
+        $user->display();
+        echo "Login Successful!\n Welcome";
+        
         ?>
     </body>
 </html>

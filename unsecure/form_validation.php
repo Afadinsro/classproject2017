@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-require_once '../database/init.php';
+//require_once '../database/init.php';
 
 define("PWD_REGEX", "/^([a-zA-Z0-9@*#]{8,15})$/");
 define("EMAIL_REGEX", "/^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/");

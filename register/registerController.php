@@ -5,8 +5,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require '../database/init.php';
-require '../unsecure/form_validation.php';
+require dirname(__FILE__).'/../database/init.php';
+require dirname(__FILE__).'/../unsecure/form_validation.php';
 
 //connect to database
 $db = 'cproject';
@@ -38,7 +38,7 @@ if (connected($connection)) {
         $gender = $_POST['gender'];
         $major = $_POST['major'];
         
-        echo '';
+        
         
     }
 }

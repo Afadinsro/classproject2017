@@ -230,31 +230,6 @@ function select($key, $table, $columns, $types, $dbCon) {
 }
 
 
-
-
-function selectUser(string $username){
-    $result = NULL;
-    $dbCon = connectToDB('cproject');
-    $types = 's';
-
-    if (!connected($dbCon)) {
-        die();
-    }
-    $prepStatement = mysqli_prepare($dbCon, "SELECT username, fname, lname, password, email, gender, major_id, per_id FROM useraccount WHERE username = ?");
-
-    if ($prepStatement) {
-        //bind parameters
-        mysqli_stmt_bind_param($prepStatement, $types, $username);
-        //execute prepared statement
-        mysqli_stmt_execute($prepStatement);
-        $result = mysqli_stmt_get_result($prepStatement);
-    }
-
-    return $result;
-
-}
-
-
 /**
  * Searches the database for values similar to the keyword entered.
  * Returns the entire result.

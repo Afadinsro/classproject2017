@@ -5,20 +5,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+require_once dirname(__FILE__)."/../settings/core.php";
 
-require_once '../unsecure/retrieval_functions.php';
-require_once '../unsecure/form_validation.php';
+$cpage = basename($_SERVER['PHP_SELF']);
+
+require_once dirname(__FILE__)."/../unsecure/retrieval_functions.php";
+require_once dirname(__FILE__)."/../unsecure/form_validation.php";
 
 define('DEFAULT_STATUS', 'ACTIVE');
 define('STUDENT_PERMISSION', 2);
 define('FACULTY_PERMISSION', 3);
 define('ADMIN_PERMISSION', 1);
+define('DEFAULT_PASSWORD', 'mydefault');
+define('DEFAULT_NAME', 'default');
+define('DEFAULT_EMAIL', 'ACTIVE');
+define('DEFAULT_GENDER', 'ACTIVE');
+define('DEFAULT_MAJOR', 1);
+
+
 /**
  * Description of User
  *
  * @author afadinsro
  */
-class User {
+class User implements Serializable {
 
     //put your code here
     public $username;
@@ -52,8 +62,7 @@ class User {
             $this->username = strtolower($username);
             $this->fname = $fname;
             $this->lname = $lname;
-            //password should be hashed
-            $this->password = password_hash($password, PASSWORD_DEFAULT);
+            $this->password = $password;
             $this->email = $email;
             //gender should be uppercase
             $this->gender = strtoupper($gender);
@@ -61,6 +70,10 @@ class User {
             $this->status = DEFAULT_STATUS;
             $this->per_id = $per_id;
         }
+    }
+    
+    public static function getDefault() {
+        return new User(DEFAULT_NAME, DEFAULT_NAME, DEFAULT_NAME, DEFAULT_PASSWORD, DEFAULT_EMAIL, DEFAULT_GENDER, DEFAULT_MAJOR, STUDENT_PERMISSION);
     }
 
     /**
@@ -107,18 +120,15 @@ class User {
         //per_id should exist
         //fname, lname & username should be strings and should only contain letters
         
-        echo 'before check';
 
         if ($this->username_exists($username) == FALSE && $this->valid_username($username) == TRUE 
                 && validatePassword($pwd) == TRUE && $this->email_exists($email) == FALSE 
                 && validateEmail($email) == TRUE && $this->major_exists($major_id) == TRUE 
                 && $this->per_exists($per_id) == TRUE && $this->valid_gender($gend) == TRUE 
                 && $this->valid_fname($fname) == TRUE && $this->valid_lname($lname) == TRUE) {
-            echo 'check successful';
             $valid = TRUE;
         }
-        $bool = $valid ? 'true': 'false';
-        echo '<br>'.$bool;
+        
         return $valid;
     }
 
@@ -246,11 +256,12 @@ class User {
         return is_string($lname) && ctype_alpha($lname); 
     }
     
+    
     /**
      * 
      * @param User $user
      */
-    private function changeUserStatus(User $user) {
+    /*private function changeUserStatus(User $user) {
         switch ($user->status) {
             case 'ACTIVE':
                 $user->status = 'INACTIVE';
@@ -276,10 +287,22 @@ class User {
         }
 
         return $success;
+    }*/
+    
+    /* ---------------------------------------------------------------------
+     *                           Setter Methods
+      -------------------------------------------------------------------- */
+    public function setStatus($status) {
+        $success = FALSE;
+        switch (strtoupper($status)) {
+            case "ACTIVE":
+            case "INACTIVE":
+                $this->status = strtoupper($status);
+                $success = TRUE;
+                break;
+        }
+        return $success;
     }
-    
-    
-    
     /* ---------------------------------------------------------------------
      *                           Getter Methods
       -------------------------------------------------------------------- */
@@ -314,20 +337,23 @@ class User {
             echo $value.'<br>';
         }
     }
+    
+    /* ---------------------------------------------------------------------
+     *                           Serializable Methods
+      -------------------------------------------------------------------- */
+    
+    public function serialize() {
+        return serialize($this->toArray()); 
+    }
 
+    public function unserialize($serialized) {
+        return unserialize($serialized); 
+    }
+    
+    public static function init($array) {
+        $new_user = new User($array[0], $array[1], $array[2], $array[3], $array[4], $array[5], $array[6], $array[8]);
+        $new_user->setStatus($array[7]);
+        return $new_user;
+    }
 }
 
-$username = 'dxd';
-$fname = 'Derrick';
-$lname = 'Dowuona';
-$password = 'enigmadxd';
-$email = 'derrick.dowuona@ashesi.edu.gh';
-$gender = 'M';
-$major_id = 1;
-$per_id = 2;
-
-$user = new User($username, $fname, $lname, $password, $email, $gender, $major_id, $per_id);
-
-$user->display();
-
-echo "$user->lname";

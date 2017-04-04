@@ -5,8 +5,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-require_once '../database/init.php';
+$root = realpath($_SERVER['DOCUMENT_ROOT']);
+require_once dirname(__FILE__)."/../database/init.php";
 
 
 /**
@@ -119,4 +119,37 @@ function getPermissions() {
     }
 
     return $result;
+}
+
+/**
+ * 
+ * @param string $username
+ * @return array
+ */
+function selectUser(string $username){
+    $result = NULL;
+    $assoc_array = NULL;
+    $dbCon = connectToDB('cproject');
+
+    if (!connected($dbCon)) {
+        die();
+    }
+    //prepare statement
+    $prepStatement = mysqli_prepare($dbCon, "SELECT username, pwd, fname, lname, email, gender, major_id, per_id FROM useraccount WHERE username = ?");
+
+    if ($prepStatement) {
+        //bind parameters
+        mysqli_stmt_bind_param($prepStatement, 's', $username);
+        //execute prepared statement
+        mysqli_stmt_execute($prepStatement);
+        $result = mysqli_stmt_get_result($prepStatement);
+        //fetch assoc array
+        $assoc_array = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        
+    }
+    //close resources
+    mysqli_stmt_close($prepStatement);
+    mysqli_close($dbCon);
+    //return assoc array
+    return $assoc_array;
 }

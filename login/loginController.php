@@ -6,54 +6,54 @@
  * and open the template in the editor.
  */
 
-require '../database/init.php';
-require '../classes/User.php';
+require '../unsecure/retrieval_functions.php';
+require dirname(__FILE__)."/../classes/User.php";
 
 $username = '';
 $password = '';
-$email = '';
-$fname = '';
-$lname = '';
-
 $correctPass = '';
 
 if (isset($_POST['submit'])) {
     $username = $_POST['uname'];
     $password = $_POST['pwd'];
 
-    //connect to database
-    $con = connectToDB("cproject");
-    if (!connected($con)) {
-        echo 'Not connected to database';
-    } elseif (connected($con)) {
+    $result = selectUser($username);
+    
+    foreach ($result as $value) {
+        echo '**  '.$value['username'];
+    }
 
-        $valueArray = array($username);
-        //check if username exists in database
-        //NB: select function returns an array.
-        $table = 'useraccount';
-        $columns = array('pwd','username');
-        $passArray = select($username, $table, $columns, getTypes($valueArray), $con);
-        if (!$passArray) {
-            //username does not exist
-            echo "Username: $username does not exist";
-        } else{
-            //echo $passArray[0];
-            $correctPass = $passArray[0];
-            //once username exists, authenticate login details
-            if (authenticate($password, $correctPass)) {
-                echo 'login successful';
+    if (!$result || $result != NULL) {
+        //username does not exist
+        echo "Username: $username does not exist";
+    } else {
+        $user_record = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        
+        $correctPass = $user_record['pwd'];
+        echo $user_record['pwd'];
+        //once username exists, authenticate login details
+        if (authenticate($password, $correctPass)) {
+            echo 'login successful';
 
-                //start session
-                session_start();
-
-                global $username;
-                $_SESSION['user'] = $username;
-                header('Location: ../index.php');
-            } else {
-                echo "Password incorrect. Please enter the correct password for $username";
-            }
+            //create a user object to use as a session variable
+            //use password that the user typed, not the one from the database 
+            $user = new User($user_record['username'], $user_record['fname'], $user_record['lname'], $password, $user_record['email'], $user_record['gender'], $user_record['major_id'], $user_record['per_id']);
+            $user->display();
+            
+            
+            
+            //start session
+            session_start();
+            $ser = $user->serialize();
+            echo $ser;
+            
+            $_SESSION['suser'] = $ser; 
+            header('Location: ../index.php');
+        } else {
+            echo "Password incorrect. Please enter the correct password for $username";
         }
     }
 }
+
 
 //echo password_hash('an0;n!M#2', PASSWORD_DEFAULT);

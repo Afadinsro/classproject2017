@@ -5,15 +5,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+include 'retrieval_functions.php';
 
-function verify_login($user) {
-    
-}
-//start session
-//session_start();
+$array = selectUser('admin');
+echo $array['pwd'];
 
-function getCurrentPage() {
-    return basename($_SERVER['PHP_SELF']);
-}
-
-?>
+/*foreach ($array as $value) {
+    echo $value['fname'];
+}*/
