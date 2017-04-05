@@ -7,10 +7,9 @@
  */
 require dirname(__FILE__).'/../database/init.php';
 require dirname(__FILE__).'/../unsecure/form_validation.php';
+require dirname(__FILE__).'/../classes/User.php';
 
-//connect to database
-$db = 'cproject';
-$connection = connectToDB($db);
+
 
 //form
 //username text length
@@ -27,21 +26,29 @@ $connection = connectToDB($db);
 //submit
 //validation - javascript & php
 //insert to database
-if (connected($connection)) {
+
     //get variables
     if(isset($_POST['submit'])) {
-        $username = strlen($_POST['uname']) > 0 ? $_POST['uname']: '';
-        $password = $_POST['pword'];
-        $fname = $_POST['fname'];
-        $lname = $_POST['lname'];
-        $email = $_POST['email'];
-        $gender = $_POST['gender'];
-        $major = $_POST['major'];
+        $username = strlen($_POST['uname']) > 0 ? test_input($_POST['uname']): '';
+        $password = test_input($_POST['pword']);
+        $fname = test_input($_POST['fname']);
+        $lname = test_input($_POST['lname']);
+        $email = test_input($_POST['email']);
+        $gender = test_input($_POST['gender']);
+        $major = test_input($_POST['major']); 
         
+        $major_id = getMajorId($major);
+        echo $major_id;
         
-        
+        $user = new User($username, $fname, $lname, $password, $email, $gender, $major_id, 2);
+        $success = register($user);
+        if($success){
+            header("Location: ../login/");
+        } else {
+            echo 'unsuccessful';
+        }
     }
-}
+
 
 /**
  * Registers a new user of the system
@@ -63,7 +70,8 @@ function register($user) {
         //check if prepared statement was successful
         if ($prepStatement) {
             //bind parameters
-            mysqli_stmt_bind_param($prepStatement, $types, $user->username, $user->getPassword(), $user->fname, $user->lname, $user->getEmail(), $user->gender, $user->major_id, $user->status, $user->per_id);
+            $hash_pwd = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+            mysqli_stmt_bind_param($prepStatement, $types, $user->username, $hash_pwd, $user->fname, $user->lname, $user->getEmail(), $user->gender, $user->major_id, $user->status, $user->per_id);
             //execute prepared statement
             $success = mysqli_stmt_execute($prepStatement);
         }
@@ -71,4 +79,36 @@ function register($user) {
         mysqli_stmt_close($prepStatement);
     }
     return $success;
+}
+
+function test_input($data) {
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars($data);
+  
+  return $data;
+}
+
+function getMajorId($major) {
+    $major_id = -1;
+    $result = NULL;
+    $con = connectToDB('cproject');
+    if(connected($con)){
+        //prepare an sql statement
+        $prepStatement = mysqli_prepare($con, "SELECT majorid FROM allmajor WHERE majorname = ?");
+        //check if prepared statement was successful
+        if ($prepStatement) {
+            //bind parameters
+            mysqli_stmt_bind_param($prepStatement, 'i', $major);
+            //execute prepared statement
+            mysqli_stmt_execute($prepStatement);
+            $result = mysqli_stmt_get_result($prepStatement);
+        }
+        $assoc_array = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $major_id = $assoc_array['majorid'];
+        //close prepared statement
+        mysqli_stmt_close($prepStatement);
+        mysqli_close($con);
+    }
+    return $major_id;
 }

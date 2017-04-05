@@ -9,17 +9,17 @@
 require dirname(__FILE__).'/../unsecure/retrieval_functions.php';
 require dirname(__FILE__)."/../classes/User.php";
 
-$username = 'admin';
-$password = 'an0;n!M#2';
+$username = 'derick';
+$password = 'derickomari';
 
-$user_record = selectUser('admin');
+$user_record = selectUser($username);
 $correctPass = $user_record['pwd'];
 
 if (authenticate($password, $correctPass)) {
     echo 'correct password';
     echo "<br>";
     
-    echo $user_record['username'];
+    /*echo $user_record['username'];
     echo "<br>";
     echo $user_record['fname'];
     
@@ -35,7 +35,7 @@ if (authenticate($password, $correctPass)) {
     echo $user_record['major_id'];
     echo "<br>";
     echo $user_record['per_id'];
-    echo "<br>";
+    echo "<br>";*/
     
     if(validatePassword($password)){
         echo 'matches regex'.'<br>';
@@ -57,3 +57,4 @@ if (authenticate($password, $correctPass)) {
 
 $n = User::getDefault();
 $n->display();
+$n->test($username,$user_record['email']);

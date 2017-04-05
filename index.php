@@ -25,9 +25,9 @@ and open the template in the editor.
         $temp = User::getDefault();
         $unseri = $temp->unserialize($_SESSION['suser']); 
         
-        $user = User::init($unseri);
+        //$user = User::init($unseri);
         //var_dump($user);
-        $user->display();
+        //$user->display();
         echo "Login Successful!\n Welcome";
         
         ?>

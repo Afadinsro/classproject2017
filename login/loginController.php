@@ -9,8 +9,8 @@
 require dirname(__FILE__).'/../unsecure/retrieval_functions.php';
 require dirname(__FILE__)."/../classes/User.php";
 
-$username = '';
-$password = '';
+$username = 'derick';
+$password = 'derickomari';
 $correctPass = '';
 
 if (isset($_POST['submit'])) {
@@ -19,10 +19,8 @@ if (isset($_POST['submit'])) {
 
     $user_record = selectUser('admin');
     
-    echo $user_record['pwd'];
-    /*foreach ($result as $value) {
-        echo '**  '.$value['username'];
-    }*/
+    //echo $user_record['pwd'];
+    
 
     if (!$user_record) {
         //username does not exist
@@ -31,10 +29,9 @@ if (isset($_POST['submit'])) {
         
         
         $correctPass = $user_record['pwd'];
-        echo $user_record['pwd'];
+        //echo $user_record['pwd'];
         //once username exists, authenticate login details
         if (authenticate($password, $correctPass)) {
-            echo 'login successful';
 
             //create a user object to use as a session variable
             //use password that the user typed, not the one from the database 
@@ -44,18 +41,25 @@ if (isset($_POST['submit'])) {
             
             
             
-            //start session
+            
             session_start();
+            if(isset($_SESSION['error']) && isset($_SESSION['username'])){
+                unset($_SESSION['error']);
+                unset($_SESSION['username']);
+            }
+            
             $ser = $user->serialize();
             echo $ser;
             
             $_SESSION['suser'] = $ser; 
             header('Location: ../index.php');
         } else {
-            echo "Password incorrect. Please enter the correct password for $username";
+            
+            $var = "Password incorrect. Please enter the correct password for $username";
+            session_start();
+            $_SESSION['error'] = $var;
+            $_SESSION['username'] = $username;
+            header('Location: index.php');
         }
     }
 }
-
-
-//echo password_hash('an0;n!M#2', PASSWORD_DEFAULT);

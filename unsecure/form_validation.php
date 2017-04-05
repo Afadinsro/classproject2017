@@ -36,3 +36,4 @@ function validatePassword(string $passwd) {
     }
     return $correct;
 }
+

@@ -142,8 +142,8 @@ class User implements Serializable {
         }*/
         
         if (User::username_exists($username) == FALSE && User::valid_username($username) == TRUE 
-                && validatePassword($pwd) == TRUE && User::email_exists($email) == FALSE 
-                && validateEmail($email) == TRUE && User::major_exists($major_id) == TRUE 
+                && validatePassword($pwd) == TRUE /*&& User::email_exists($email) == FALSE*/
+                && validateEmail($email) == TRUE && User::major_exists($major_id) == TRUE
                 && User::per_exists($per_id) == TRUE && User::valid_gender($gend) == TRUE 
                 && User::valid_fname($fname) == TRUE && User::valid_lname($lname) == TRUE) {
             $valid = TRUE;
@@ -192,13 +192,22 @@ class User implements Serializable {
         return $success;
     }
     
-    public function test($username) {
+    
+    public function test($username,$email) {
         switch ($this->username_exists($username)) {
             case TRUE:
                 echo 'username exists';
                 break;
             case FALSE:
                 echo 'username exists';
+                break;
+        }
+        switch ($this->username_exists($email)) {
+            case TRUE:
+                echo 'email exists';
+                break;
+            case FALSE:
+                echo 'email exists';
                 break;
         }
     }
@@ -358,7 +367,7 @@ class User implements Serializable {
      * 
      * @return string
      */
-    private function getPassword() {
+    public function getPassword() {
         return $this->password;
     }
     
