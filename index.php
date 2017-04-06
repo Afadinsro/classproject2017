@@ -1,10 +1,3 @@
-<?php
-session_start();
-if (!isset($_SESSION['suser']) || empty($_SESSION['suser'])) {
-    header('Location: login/index.php');
-}
-?>
-
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -19,15 +12,20 @@ and open the template in the editor.
     </head>
     <body>
         <?php
-        include 'layout/header.php';
-        require_once dirname(__FILE__).'/classes/User.php';
+        require_once dirname(__FILE__).'/settings/core.php';
+        verify_login();
         
+        require_once dirname(__FILE__).'/classes/User.php';
         $temp = User::getDefault();
         $unseri = $temp->unserialize($_SESSION['suser']); 
+        
+        
+        
         
         //$user = User::init($unseri);
         //var_dump($user);
         //$user->display();
+        getHeader($user->per_id);
         echo "Login Successful!\n Welcome";
         
         ?>

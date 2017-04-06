@@ -34,8 +34,8 @@ function validatePassword(){
 }
 
 function validateUsername(){
-    var valid = uname.value === '' || !NAME_REGEX.test(uname.value);
-    if(!valid){
+    var valid = false;
+    if(uname.value === '' || !NAME_REGEX.test(uname.value)){
         uname.style.borderColor = "red";
     }else{
         valid = true;

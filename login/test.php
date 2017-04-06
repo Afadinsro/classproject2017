@@ -41,15 +41,16 @@ if (authenticate($password, $correctPass)) {
         echo 'matches regex'.'<br>';
     }
     
-    $valid = User::is_valid($user_record['username'], $user_record['fname'], $user_record['lname'], $password, $user_record['email'], $user_record['gender'], $user_record['major_id'], $user_record['per_id']);
+    $valid = User::is_valid(0, $username, $user_record['fname'], $user_record['lname'], $password, $user_record['email'], $user_record['gender'], $user_record['major_id'], $user_record['per_id']);
     
     if($valid){
         echo 'correct details';
     } else {
         echo 'wrong details';
     }
+    echo '<br>';
     
-    $user = new User($user_record['username'], $user_record['fname'], $user_record['lname'], $password, $user_record['email'], $user_record['gender'], $user_record['major_id'], $user_record['per_id']);
+    $user = new User(0, $user_record['username'], $user_record['fname'], $user_record['lname'], $password, $user_record['email'], $user_record['gender'], $user_record['major_id'], $user_record['per_id']);
     
     $user->display();
 }
@@ -57,4 +58,5 @@ if (authenticate($password, $correctPass)) {
 
 $n = User::getDefault();
 $n->display();
-$n->test($username,$user_record['email']);
+
+$n->test($username, $user_record['email']);

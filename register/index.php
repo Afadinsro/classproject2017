@@ -17,7 +17,8 @@
                 </fieldset>
                 <fieldset>
                     <input placeholder="Password" id="pword" name="pword" type="password" tabindex="2" required onblur="validatePassword()">
-                    <span id="passwordError"></span>
+                    
+                    
                 </fieldset>
                 <fieldset>
                     <input placeholder="First name" id="fname" name="fname" type="text" tabindex="3" required onblur="validateFname()">

@@ -13,6 +13,8 @@ require_once dirname(__FILE__)."/../unsecure/retrieval_functions.php";
 require_once dirname(__FILE__)."/../unsecure/form_validation.php";
 
 define('DEFAULT_STATUS', 'ACTIVE');
+define('NEW_USER', 1);
+define('DUPLICATE_USER', 0);
 define('STUDENT_PERMISSION', 2);
 define('FACULTY_PERMISSION', 3);
 define('ADMIN_PERMISSION', 1);
@@ -45,6 +47,7 @@ class User implements Serializable {
 
     /**
      * 
+     * @param int $new Determines whether this user is new (1) or a duplicate (0)
      * @param string $username
      * @param string $fname
      * @param string $lname
@@ -54,9 +57,11 @@ class User implements Serializable {
      * @param int $major_id
      * @param int $per_id
      */
-    public function __construct(string $username, string $fname, string $lname, string $password, string $email, string $gender, int $major_id, int $per_id) {
+    public function __construct(int $new, string $username, string $fname, string $lname, string $password, string $email, string $gender, int $major_id, int $per_id) {
+        
+        
         //values given must be valid
-        $is_valid = $this->is_valid($username, $fname, $lname, $password, $email, $gender, $major_id, $per_id);
+        $is_valid = $this->is_valid($new, $username, $fname, $lname, $password, $email, $gender, $major_id, $per_id);
         if ($is_valid) {
             //all usernames must be lowercase
             $this->username = strtolower($username);
@@ -71,47 +76,10 @@ class User implements Serializable {
             $this->per_id = $per_id;
         }
     }
-    
-    public static function getDefault() {
-        return new User(DEFAULT_NAME, DEFAULT_NAME, DEFAULT_NAME, DEFAULT_PASSWORD, DEFAULT_EMAIL, DEFAULT_GENDER, DEFAULT_MAJOR, STUDENT_PERMISSION);
-    }
 
     /**
      * 
-     * @param User $user
-     * @return boolean
-     */
-    public function addUser(User $user) {
-        $success = FALSE;
-        //user has to be admin before they can add another user
-        if ($this->per_id === 1) {
-            register($user);
-        }
-        return $success;
-    }
-
-    /**
-     * 
-     * @return array
-     */
-    public function toArray() {
-        $array = array();
-        //push user details into array
-        array_push($array, $this->username);
-        array_push($array, $this->fname);
-        array_push($array, $this->lname);
-        array_push($array, $this->password);
-        array_push($array, $this->email);
-        array_push($array, $this->gender);
-        array_push($array, $this->major_id);
-        array_push($array, $this->status);
-        array_push($array, $this->per_id);
-        //return array
-        return $array;
-    }
-
-    /**
-     * 
+     * @param int $new Description
      * @param string $username
      * @param string $fname
      * @param string $lname
@@ -122,7 +90,7 @@ class User implements Serializable {
      * @param int $per_id
      * @return boolean
      */
-    public static function is_valid(string $username, string $fname, string $lname, string $pwd, string $email, string $gend, int $major_id, int $per_id) {
+    public static function is_valid(int $new, string $username, string $fname, string $lname, string $pwd, string $email, string $gend, int $major_id, int $per_id) {
         $valid = FALSE;
         //username should not exist i.e unique
         //password should match regex
@@ -133,24 +101,43 @@ class User implements Serializable {
         //fname, lname & username should be strings and should only contain letters
         
 
-        /*if ($this->username_exists($username) == FALSE && $this->valid_username($username) == TRUE 
-                && validatePassword($pwd) == TRUE && $this->email_exists($email) == FALSE 
+        /*if ($this->valid_username($username) == TRUE 
+                && validatePassword($pwd) == TRUE 
                 && validateEmail($email) == TRUE && $this->major_exists($major_id) == TRUE 
                 && $this->per_exists($per_id) == TRUE && $this->valid_gender($gend) == TRUE 
                 && $this->valid_fname($fname) == TRUE && $this->valid_lname($lname) == TRUE) {
             $valid = TRUE;
+        }
+        
+        if($new === DUPLICATE_USER){
+            $valid += $this->username_exists($username) && $this->email_exists($email);
+        }elseif($new === NEW_USER){
+                $valid += $this->username_exists($username) && $this->email_exists($email);
         }*/
         
-        if (User::username_exists($username) == FALSE && User::valid_username($username) == TRUE 
-                && validatePassword($pwd) == TRUE /*&& User::email_exists($email) == FALSE*/
-                && validateEmail($email) == TRUE && User::major_exists($major_id) == TRUE
+        if (User::valid_username($username) == TRUE 
+                && validatePassword($pwd) == TRUE 
+                && validateEmail($email) == TRUE && User::major_exists($major_id) == TRUE 
                 && User::per_exists($per_id) == TRUE && User::valid_gender($gend) == TRUE 
                 && User::valid_fname($fname) == TRUE && User::valid_lname($lname) == TRUE) {
             $valid = TRUE;
         }
         
+        if($new === DUPLICATE_USER){
+            $valid += User::username_exists($username) && User::email_exists($email);
+        }elseif($new === NEW_USER){
+                $valid += !User::username_exists($username) && !User::email_exists($email);
+        }
+        
         return $valid;
     }
+    
+    
+    public static function getDefault() {
+        return new User(NEW_USER, DEFAULT_NAME, DEFAULT_NAME, DEFAULT_NAME, DEFAULT_PASSWORD, DEFAULT_EMAIL, DEFAULT_GENDER, DEFAULT_MAJOR, STUDENT_PERMISSION);
+    }
+    
+    
 
     /**
      * Checks the email given already exists in the database
@@ -394,5 +381,50 @@ class User implements Serializable {
         $new_user = new User($array[0], $array[1], $array[2], $array[3], $array[4], $array[5], $array[6], $array[8]);
         $new_user->setStatus($array[7]);
         return $new_user;
+    }
+    
+    public static function duplicate($array) {
+        $new_user = new User($array[0], $array[1], $array[2], $array[3], $array[4], $array[5], $array[6], $array[8]);
+        $new_user->setStatus($array[7]);
+        return $new_user;
+    }
+    
+    /* ---------------------------------------------------------------------
+     *                           Special Methods
+      -------------------------------------------------------------------- */
+    
+    /**
+     * 
+     * @return array
+     */
+    public function toArray() {
+        $array = array();
+        //push user details into array
+        array_push($array, $this->username);
+        array_push($array, $this->fname);
+        array_push($array, $this->lname);
+        array_push($array, $this->password);
+        array_push($array, $this->email);
+        array_push($array, $this->gender);
+        array_push($array, $this->major_id);
+        array_push($array, $this->status);
+        array_push($array, $this->per_id);
+        //return array
+        return $array;
+    }
+    
+    
+    /**
+     * 
+     * @param User $user
+     * @return boolean
+     */
+    public function addUser(User $user) {
+        $success = FALSE;
+        //user has to be admin before they can add another user
+        if ($this->per_id === 1) {
+            register($user);
+        }
+        return $success;
     }
 }

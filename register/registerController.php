@@ -81,14 +81,6 @@ function register($user) {
     return $success;
 }
 
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  
-  return $data;
-}
-
 function getMajorId($major) {
     $major_id = -1;
     $result = NULL;
