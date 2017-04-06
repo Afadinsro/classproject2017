@@ -24,9 +24,9 @@ if (isset($_POST['submit'])) {
     
     //echo $user_record['pwd'];
     
-    if(!$user_record){
+    /*if(!$user_record){
         $unameMessage = "Username does not exist";
-    }
+    }*/
 
     if (empty($unameMessage) && empty($unameMessage) && $user_record) {
         
@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
 
             //create a user object to use as a session variable
             //use password that the user typed, not the one from the database 
-            $user = new User(1, $user_record['username'], $user_record['fname'], $user_record['lname'], $password, $user_record['email'], $user_record['gender'], $user_record['major_id'], $user_record['per_id']);
+            $user = new User(0, $user_record['username'], $user_record['fname'], $user_record['lname'], $password, $user_record['email'], $user_record['gender'], $user_record['major_id'], $user_record['per_id']);
             
             //$user->display();
             
@@ -50,13 +50,13 @@ if (isset($_POST['submit'])) {
             }
             
             $ser = $user->serialize();
-            //echo $ser;
+            echo $ser;
             
             $_SESSION['suser'] = $ser; 
             if(isset($_SESSION['suser'])){
                 echo 'session '.$_SESSION['suser'].' has been set';
             }
-            //header('Location: ../index.php');
+            header('Location: ../index.php');
         } else {
             
             $pwdMessage = "Password incorrect. Please enter the correct password for $username"; 

@@ -40,7 +40,7 @@ require dirname(__FILE__).'/../classes/User.php';
         $major_id = getMajorId($major);
         echo $major_id;
         
-        $user = new User($username, $fname, $lname, $password, $email, $gender, $major_id, 2);
+        $user = new User(1, $username, $fname, $lname, $password, $email, $gender, $major_id, 2);
         $success = register($user);
         if($success){
             header("Location: ../login/");

@@ -90,7 +90,7 @@ class User implements Serializable {
      * @param int $per_id
      * @return boolean
      */
-    public static function is_valid(int $new, string $username, string $fname, string $lname, string $pwd, string $email, string $gend, int $major_id, int $per_id) {
+    private function is_valid(int $new, string $username, string $fname, string $lname, string $pwd, string $email, string $gend, int $major_id, int $per_id) {
         $valid = FALSE;
         //username should not exist i.e unique
         //password should match regex
@@ -101,7 +101,7 @@ class User implements Serializable {
         //fname, lname & username should be strings and should only contain letters
         
 
-        /*if ($this->valid_username($username) == TRUE 
+        if ($this->valid_username($username) == TRUE 
                 && validatePassword($pwd) == TRUE 
                 && validateEmail($email) == TRUE && $this->major_exists($major_id) == TRUE 
                 && $this->per_exists($per_id) == TRUE && $this->valid_gender($gend) == TRUE 
@@ -112,10 +112,10 @@ class User implements Serializable {
         if($new === DUPLICATE_USER){
             $valid += $this->username_exists($username) && $this->email_exists($email);
         }elseif($new === NEW_USER){
-                $valid += $this->username_exists($username) && $this->email_exists($email);
-        }*/
+                $valid += !$this->username_exists($username) && !$this->email_exists($email);
+        }
         
-        if (User::valid_username($username) == TRUE 
+        /*if (User::valid_username($username) == TRUE 
                 && validatePassword($pwd) == TRUE 
                 && validateEmail($email) == TRUE && User::major_exists($major_id) == TRUE 
                 && User::per_exists($per_id) == TRUE && User::valid_gender($gend) == TRUE 
@@ -127,12 +127,15 @@ class User implements Serializable {
             $valid += User::username_exists($username) && User::email_exists($email);
         }elseif($new === NEW_USER){
                 $valid += !User::username_exists($username) && !User::email_exists($email);
-        }
+        }*/
         
         return $valid;
     }
     
-    
+    /**
+     * 
+     * @return \User
+     */
     public static function getDefault() {
         return new User(NEW_USER, DEFAULT_NAME, DEFAULT_NAME, DEFAULT_NAME, DEFAULT_PASSWORD, DEFAULT_EMAIL, DEFAULT_GENDER, DEFAULT_MAJOR, STUDENT_PERMISSION);
     }
@@ -319,7 +322,7 @@ class User implements Serializable {
     /* ---------------------------------------------------------------------
      *                           Setter Methods
       -------------------------------------------------------------------- */
-    public function setStatus($status) {
+    public function setStatus(string $status) {
         $success = FALSE;
         switch (strtoupper($status)) {
             case "ACTIVE":
@@ -377,15 +380,12 @@ class User implements Serializable {
         return unserialize($serialized); 
     }
     
-    public static function init($array) {
-        $new_user = new User($array[0], $array[1], $array[2], $array[3], $array[4], $array[5], $array[6], $array[8]);
-        $new_user->setStatus($array[7]);
-        return $new_user;
-    }
     
-    public static function duplicate($array) {
-        $new_user = new User($array[0], $array[1], $array[2], $array[3], $array[4], $array[5], $array[6], $array[8]);
+    public static function init(Array $array) {
+        $new_user = new User(DUPLICATE_USER, $array[0], $array[1], $array[2], $array[3], $array[4], $array[5], $array[6], $array[8]);
+        
         $new_user->setStatus($array[7]);
+        
         return $new_user;
     }
     

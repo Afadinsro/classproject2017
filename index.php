@@ -12,19 +12,18 @@ and open the template in the editor.
     </head>
     <body>
         <?php
+        //verify login
         require_once dirname(__FILE__).'/settings/core.php';
         verify_login();
         
         require_once dirname(__FILE__).'/classes/User.php';
         $temp = User::getDefault();
+        //unserialise user data
         $unseri = $temp->unserialize($_SESSION['suser']); 
-        
-        
-        
-        
-        //$user = User::init($unseri);
-        //var_dump($user);
-        //$user->display();
+        //replicate user
+        $user = User::init($unseri);
+        //var_dump($unseri);
+        $user->display();
         getHeader($user->per_id);
         echo "Login Successful!\n Welcome";
         

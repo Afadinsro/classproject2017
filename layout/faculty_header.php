@@ -1,8 +1,8 @@
-<?php
 
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
+<nav>
+    <ul>
+        <li><a href="">Insert</a></li>
+        <li><a href="">Search</a></li>
+        <li><a href="login/logout.php">Logout</a></li>
+    </ul>
+</nav>

@@ -23,13 +23,13 @@ function getHeader($permission){
     
     switch ($permission) {
         case 1:
-            require_once '../layout/admin_header.php';
+            require_once dirname(__FILE__).'/../layout/admin_header.php';
             break;
         case 2:
-            require_once '../layout/student_header.php';
+            require_once dirname(__FILE__).'/../layout/student_header.php';
             break;
         case 3:
-            require_once '../layout/faculty_header.php';
+            require_once dirname(__FILE__).'/../layout/faculty_header.php';
             break;
     }
 }
