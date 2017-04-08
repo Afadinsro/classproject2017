@@ -7,20 +7,19 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Class Project 2017</title>
-        <link rel="stylesheet" type="text/css" href="css/header_style.css">
+        <title>Manage majors</title>
+        <link rel="stylesheet" type="text/css" href="../css/header_style.css">
     </head>
     <body>
+
         <?php
-        //verify login
-        require_once dirname(__FILE__).'/settings/core.php';
+        require_once dirname(__FILE__) . '/../settings/core.php';
         verify_login();
-        
-        require_once dirname(__FILE__).'/classes/User.php';
+        require_once dirname(__FILE__) . '/../classes/User.php';
         $user = unserializeUser($_SESSION['suser']);
         getHeader($user->per_id);
-        echo "Login Successful!\n Welcome $user->fname $user->lname";
-        
+
+        echo 'All majors page';
         ?>
     </body>
 </html>

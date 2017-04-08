@@ -14,7 +14,7 @@ var majorSelect = document.getElementById("majorSelect");
 
 //define regex expressions
 var NAME_REGEX = /^[a-zA-Z]+$/;
-var PWD_REGEX = /([a-zA-Z0-9@*#!;]{8,15})$/;
+var PWD_REGEX = /([a-zA-Z0-9@*#!;]{5,15})$/;
 var EMAIL_REGEX = /^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$/;
 
 function validateRegistration(){

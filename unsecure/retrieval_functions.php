@@ -1,13 +1,12 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 $root = realpath($_SERVER['DOCUMENT_ROOT']);
-require_once dirname(__FILE__)."/../database/init.php";
-
+require_once dirname(__FILE__) . "/../database/init.php";
 
 /**
  * 
@@ -31,7 +30,6 @@ function getEmails() {
     return $result;
 }
 
-
 /**
  * 
  * @return result
@@ -53,7 +51,6 @@ function getUsernames() {
 
     return $result;
 }
-
 
 /**
  * 
@@ -126,7 +123,7 @@ function getPermissions() {
  * @param string $username
  * @return array An assoc array with the selected record
  */
-function selectUser(string $username){
+function selectUser(string $username) {
     $result = NULL;
     $assoc_array = NULL;
     $dbCon = connectToDB('cproject');
@@ -145,7 +142,6 @@ function selectUser(string $username){
         $result = mysqli_stmt_get_result($prepStatement);
         //fetch assoc array
         $assoc_array = mysqli_fetch_array($result, MYSQLI_ASSOC);
-        
     }
     //close resources
     mysqli_stmt_close($prepStatement);

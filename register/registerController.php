@@ -5,9 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require dirname(__FILE__).'/../database/init.php';
-require dirname(__FILE__).'/../unsecure/form_validation.php';
-require dirname(__FILE__).'/../classes/User.php';
+require dirname(__FILE__) . '/../database/init.php';
+require dirname(__FILE__) . '/../unsecure/form_validation.php';
+require dirname(__FILE__) . '/../classes/User.php';
 
 
 
@@ -26,29 +26,27 @@ require dirname(__FILE__).'/../classes/User.php';
 //submit
 //validation - javascript & php
 //insert to database
+//get variables
+if (isset($_POST['submit'])) {
+    $username = strlen($_POST['uname']) > 0 ? test_input($_POST['uname']) : '';
+    $password = test_input($_POST['pword']);
+    $fname = test_input($_POST['fname']);
+    $lname = test_input($_POST['lname']);
+    $email = test_input($_POST['email']);
+    $gender = test_input($_POST['gender']);
+    $major = test_input($_POST['major']);
 
-    //get variables
-    if(isset($_POST['submit'])) {
-        $username = strlen($_POST['uname']) > 0 ? test_input($_POST['uname']): '';
-        $password = test_input($_POST['pword']);
-        $fname = test_input($_POST['fname']);
-        $lname = test_input($_POST['lname']);
-        $email = test_input($_POST['email']);
-        $gender = test_input($_POST['gender']);
-        $major = test_input($_POST['major']); 
-        
-        $major_id = getMajorId($major);
-        echo $major_id;
-        
-        $user = new User(1, $username, $fname, $lname, $password, $email, $gender, $major_id, 2);
-        $success = register($user);
-        if($success){
-            header("Location: ../login/");
-        } else {
-            echo 'unsuccessful';
-        }
+    $major_id = getMajorId($major);
+    echo $major_id;
+
+    $user = new User(1, $username, $fname, $lname, $password, $email, $gender, $major_id, 2);
+    $success = register($user);
+    if ($success) {
+        header("Location: ../login/");
+    } else {
+        echo 'unsuccessful';
     }
-
+}
 
 /**
  * Registers a new user of the system
@@ -61,8 +59,8 @@ function register($user) {
     $con = connectToDB('cproject');
     $array = $user->toArray();
     $types = getTypes($array);
-    
-    if(connected($con)){
+
+    if (connected($con)) {
         global $user;
         //prepare an sql statement
         //because double quotes are used, the values of variables are used. No concatenation needed.
@@ -85,7 +83,7 @@ function getMajorId($major) {
     $major_id = -1;
     $result = NULL;
     $con = connectToDB('cproject');
-    if(connected($con)){
+    if (connected($con)) {
         //prepare an sql statement
         $prepStatement = mysqli_prepare($con, "SELECT majorid FROM allmajor WHERE majorname = ?");
         //check if prepared statement was successful

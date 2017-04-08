@@ -101,11 +101,11 @@ function getTypes(array $valueArray) {
 }
 
 function clean_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  
-  return $data;
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+
+    return $data;
 }
 
 /**
@@ -200,7 +200,7 @@ function update(array $valueArray, $key, $table, $column, $types, $dbCon) {
 }
 
 /**
-  * Selects a column from a specified table
+ * Selects a column from a specified table
  * Allows select from useraccount table
  * @param type $key The key that determines which record to update.
  * @param type $table The table to select from.
@@ -236,7 +236,6 @@ function select($key, $table, $columns, $types, $dbCon) {
     }
     return $output;
 }
-
 
 /**
  * Searches the database for values similar to the keyword entered.
@@ -274,10 +273,10 @@ function search($keyword, $table, $column, $types, $dbCon) {
   ---------------------------------------------------------------------- */
 
 function exists($session) {
-    if(isset($session)){
+    if (isset($session)) {
         return TRUE;
     }
-    return FALSE; 
+    return FALSE;
 }
 
 /**
@@ -301,4 +300,3 @@ function authenticate(string $password, string $correctPassword) {
 function testPrint() {
     echo 'Test print. Means init.php included successfully';
 }
-
