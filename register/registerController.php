@@ -28,16 +28,15 @@ require dirname(__FILE__) . '/../classes/User.php';
 //insert to database
 //get variables
 if (isset($_POST['submit'])) {
-    $username = strlen($_POST['uname']) > 0 ? test_input($_POST['uname']) : '';
-    $password = test_input($_POST['pword']);
-    $fname = test_input($_POST['fname']);
-    $lname = test_input($_POST['lname']);
-    $email = test_input($_POST['email']);
-    $gender = test_input($_POST['gender']);
-    $major = test_input($_POST['major']);
+    $username = strlen($_POST['uname']) > 0 ? clean_input($_POST['uname']) : '';
+    $password = clean_input($_POST['pword']);
+    $fname = clean_input($_POST['fname']);
+    $lname = clean_input($_POST['lname']);
+    $email = clean_input($_POST['email']);
+    $gender = clean_input($_POST['gender']);
+    $major = clean_input($_POST['major']);
 
     $major_id = getMajorId($major);
-    echo $major_id;
 
     $user = new User(1, $username, $fname, $lname, $password, $email, $gender, $major_id, 2);
     $success = register($user);
@@ -54,7 +53,7 @@ if (isset($_POST['submit'])) {
  * @param User $user A user object to add
  * @return boolean True upon successful registration and false if otherwise
  */
-function register($user) {
+function register(User $user) {
     $success = FALSE;
     $con = connectToDB('cproject');
     $array = $user->toArray();
@@ -79,7 +78,12 @@ function register($user) {
     return $success;
 }
 
-function getMajorId($major) {
+/**
+ * 
+ * @param string $major
+ * @return int
+ */
+function getMajorId(string $major) {
     $major_id = -1;
     $result = NULL;
     $con = connectToDB('cproject');

@@ -1,6 +1,8 @@
 
 
-<?php define("BASE_URL", "http://" . $_SERVER['SERVER_NAME'] . "/classproject2017"); ?>
+<?php 
+require_once dirname(__FILE__) . "/../controller/define.php";
+?>
 
 <nav>
     <ul>

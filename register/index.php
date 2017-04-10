@@ -33,11 +33,9 @@
                     <span id="emailError"></span>
                 </fieldset>
                 <fieldset>
-                    <select name="gender" id="genderSelect" onblur="validateGender()">
-                        <option>Gender..</option>
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
-                    </select>
+                    <p>Gender:      </p>           
+                    Male<input type="radio" name="gender" id="genderSelect" value="Male">
+                    Female<input type="radio" name="gender" id="genderSelect" value="Female"><br>
                     <span id="genderError"></span>
                 </fieldset>
 
@@ -53,6 +51,9 @@
                 <fieldset>
                     <button name="submit" type="submit" id="registerSubmit" data-submit="...Sending" 
                             onclick="return validateRegistration()">Submit</button>
+                </fieldset>
+                <fieldset>
+                    <a href="../login/">Login</a>
                 </fieldset>
 
             </form>

@@ -1,28 +1,15 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * 
+ * @author Joseph Odarkwei Mills <mills.josef@gmail.com>
+ * @version 1.0
  */
 require_once dirname(__FILE__) . "/../settings/core.php";
-
-$cpage = basename($_SERVER['PHP_SELF']);
-
 require_once dirname(__FILE__) . "/../unsecure/retrieval_functions.php";
 require_once dirname(__FILE__) . "/../unsecure/form_validation.php";
+require_once dirname(__FILE__) . "/../controller/define.php";
 
-define('DEFAULT_STATUS', 'ACTIVE');
-define('NEW_USER', 1);
-define('DUPLICATE_USER', 0);
-define('STUDENT_PERMISSION', 2);
-define('FACULTY_PERMISSION', 3);
-define('ADMIN_PERMISSION', 1);
-define('DEFAULT_PASSWORD', 'mydefault');
-define('DEFAULT_NAME', 'default');
-define('DEFAULT_EMAIL', 'default@email.com');
-define('DEFAULT_GENDER', 'M');
-define('DEFAULT_MAJOR', 1);
 
 /**
  * Description of User

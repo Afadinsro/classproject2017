@@ -37,20 +37,17 @@
                     </span>
                 </fieldset>
                 <fieldset>
-                    <input placeholder="Password" id="pword" name="pwd" type="password" tabindex="2" required onblur="validatePassword()" <?php if (isset($pMessage) && !empty($pMessage)) { ?> autofocus <?php } ?>>
-                    <span id="passwordError" style="color: red">
-                        <?php
-                        if (isset($pMessage) && !empty($pMessage)) {
-                            echo $pMessage;
-                        }
-                        ?>
-                    </span>
+                    <input placeholder="Password" id="pword" name="pwd" type="password" tabindex="2" required onblur="validatePassword()" <?php  ?> autofocus>
+                    <span id="passwordError" style="color: red"><?php displayPwdError(); ?></span>
                 </fieldset>
 
                 <fieldset>
                     <button name="submit" type="submit" id="loginSubmit" data-submit="...Sending" onclick="return validateLogin()">Submit</button>
                 </fieldset>
-
+                <fieldset>
+                    <a href="../register/">Register</a>
+                </fieldset>
+                
             </form>
         </div>
 
