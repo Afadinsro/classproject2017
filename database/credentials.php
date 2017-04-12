@@ -10,7 +10,5 @@
 define('USERNAME', 'root');
 define('PASSWORD', '');
 define('SERVER', 'localhost');
-define('CLASS_DATABASE', 'webtechclass');
-define('LAB_DATABASE', 'webtechclass');
 define('CPROJECT_DATABASE', 'classproject2017');
 

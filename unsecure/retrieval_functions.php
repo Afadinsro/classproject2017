@@ -141,7 +141,7 @@ function selectUser(string $username) {
         mysqli_stmt_execute($prepStatement);
         $result = mysqli_stmt_get_result($prepStatement);
         //fetch assoc array
-        $assoc_array = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $assoc_array = mysqli_fetch_assoc($result);
     }
     //close resources
     mysqli_stmt_close($prepStatement);
