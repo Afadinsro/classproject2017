@@ -32,11 +32,11 @@ function getHeader($permission) {
     }
 }
 
-function unserializeUser($session) {
+function unserialize_user($session) {
     $user = NULL;
 
     if (isset($session)) {
-        $temp = User::getDefault();
+        $temp = User::get_default();
         //unserialise user data
         $unseri = $temp->unserialize($session);
         //replicate user

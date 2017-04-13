@@ -9,14 +9,14 @@ require_once dirname(__FILE__) . "/../settings/core.php";
 require_once dirname(__FILE__) . "/../unsecure/retrieval_functions.php";
 require_once dirname(__FILE__) . "/../unsecure/form_validation.php";
 require_once dirname(__FILE__) . "/../controller/define.php";
-
+require_once dirname(__FILE__) . "/../database/Connection.php";
 
 /**
  * Description of User
  *
  * @author afadinsro
  */
-class User implements Serializable {
+class User extends Connection implements Serializable {
 
     //put your code here
     public $username;
@@ -63,7 +63,7 @@ class User implements Serializable {
 
     /**
      * 
-     * @param int $new Description
+     * @param int $type Description
      * @param string $username
      * @param string $fname
      * @param string $lname
@@ -74,7 +74,7 @@ class User implements Serializable {
      * @param int $per_id
      * @return boolean
      */
-    private function is_valid(int $new, string $username, string $fname, string $lname, string $pwd, string $email, string $gend, int $major_id, int $per_id) {
+    private function is_valid(int $type, string $username, string $fname, string $lname, string $pwd, string $email, string $gend, int $major_id, int $per_id) {
         $valid = FALSE;
         //username should not exist i.e unique
         //password should match regex
@@ -83,32 +83,15 @@ class User implements Serializable {
         //major_id shoulf exist
         //per_id should exist
         //fname, lname & username should be strings and should only contain letters
-
-
-        if ($this->valid_username($username) == TRUE && validatePassword($pwd) == TRUE && validateEmail($email) == TRUE && $this->major_exists($major_id) == TRUE && $this->per_exists($per_id) == TRUE && $this->valid_gender($gend) == TRUE && $this->valid_fname($fname) == TRUE && $this->valid_lname($lname) == TRUE) {
+        if ($this->valid_username($username) && validatePassword($pwd) && validateEmail($email) && $this->major_exists($major_id) && $this->per_exists($per_id) && $this->valid_gender($gend) && $this->valid_fname($fname) && $this->valid_lname($lname)) {
             $valid = TRUE;
         }
 
-        if ($new === DUPLICATE_USER) {
+        if ($type === DUPLICATE_USER) {
             $valid += $this->username_exists($username) && $this->email_exists($email);
-        } elseif ($new === NEW_USER) {
+        } elseif ($type === NEW_USER) {
             $valid += !$this->username_exists($username) && !$this->email_exists($email);
         }
-
-        /* if (User::valid_username($username) == TRUE 
-          && validatePassword($pwd) == TRUE
-          && validateEmail($email) == TRUE && User::major_exists($major_id) == TRUE
-          && User::per_exists($per_id) == TRUE && User::valid_gender($gend) == TRUE
-          && User::valid_fname($fname) == TRUE && User::valid_lname($lname) == TRUE) {
-          $valid = TRUE;
-          }
-
-          if($new === DUPLICATE_USER){
-          $valid += User::username_exists($username) && User::email_exists($email);
-          }elseif($new === NEW_USER){
-          $valid += !User::username_exists($username) && !User::email_exists($email);
-          } */
-
         return $valid;
     }
 
@@ -116,7 +99,7 @@ class User implements Serializable {
      * 
      * @return \User
      */
-    public static function getDefault() {
+    public static function get_default() {
         return new User(NEW_USER, DEFAULT_NAME, DEFAULT_NAME, DEFAULT_NAME, DEFAULT_PASSWORD, DEFAULT_EMAIL, DEFAULT_GENDER, DEFAULT_MAJOR, STUDENT_PERMISSION);
     }
 
@@ -298,7 +281,7 @@ class User implements Serializable {
     /* ---------------------------------------------------------------------
      *                           Setter Methods
       -------------------------------------------------------------------- */
-    public function setStatus(string $status) {
+    public function set_status(string $status) {
         $success = FALSE;
         switch (strtoupper($status)) {
             case "ACTIVE":
@@ -318,7 +301,7 @@ class User implements Serializable {
      * 
      * @return string
      */
-    public function getEmail() {
+    public function get_email() {
         return $this->email;
     }
 
@@ -326,7 +309,7 @@ class User implements Serializable {
      * 
      * @return string
      */
-    public function getGender() {
+    public function get_gender() {
         return $this->gender;
     }
 
@@ -334,7 +317,7 @@ class User implements Serializable {
      * 
      * @return string
      */
-    public function getPassword() {
+    public function get_password() {
         return $this->password;
     }
 
@@ -350,7 +333,7 @@ class User implements Serializable {
       -------------------------------------------------------------------- */
 
     public function serialize() {
-        return serialize($this->toArray());
+        return serialize($this->to_array());
     }
 
     public function unserialize($serialized) {
@@ -360,7 +343,7 @@ class User implements Serializable {
     public static function init(Array $array) {
         $new_user = new User(DUPLICATE_USER, $array[0], $array[1], $array[2], $array[3], $array[4], $array[5], $array[6], $array[8]);
 
-        $new_user->setStatus($array[7]);
+        $new_user->set_status($array[7]);
 
         return $new_user;
     }
@@ -373,7 +356,7 @@ class User implements Serializable {
      * 
      * @return array
      */
-    public function toArray() {
+    public function to_array() {
         $array = array();
         //push user details into array
         array_push($array, $this->username);
@@ -394,7 +377,7 @@ class User implements Serializable {
      * @param User $user
      * @return boolean
      */
-    public function addUser(User $user) {
+    public function add_user(User $user) {
         $success = FALSE;
         //user has to be admin before they can add another user
         if ($this->per_id === 1) {

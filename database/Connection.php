@@ -52,8 +52,9 @@ class Connection {
             $prepStmt = mysqli_prepare($this->link, $query);
         }
         if ($prepStmt) {
+            //no need to bind params if 
             if($values != NULL){
-                $types = Connection::getTypes($values);
+                $types = Connection::get_types($values);
                 //bind the values dynamically
                 mysqli_stmt_bind_param($prepStmt, $types, ...$values);
             }
@@ -72,7 +73,7 @@ class Connection {
      * @param Array $valueArray An array of values to insert into a database
      * @return reference The string representation of the data types of the values to insert
      */
-    private static function getTypes(Array $valueArray) {
+    private static function get_types(Array $valueArray) {
         $typeString = '';
         //get type for each element of array
         foreach ($valueArray as $value) {
@@ -101,5 +102,9 @@ class Connection {
      */
     public function fetch_assoc() {
         return mysqli_fetch_assoc($this->result);
+    }
+    
+    public function get_num_rows() {
+        
     }
 }

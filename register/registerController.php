@@ -8,7 +8,7 @@
 require dirname(__FILE__) . '/../database/init.php';
 require dirname(__FILE__) . '/../unsecure/form_validation.php';
 require dirname(__FILE__) . '/../classes/User.php';
-
+require dirname(__FILE__) . '/../database/Connection.php';
 
 
 //form
@@ -56,25 +56,24 @@ if (isset($_POST['submit'])) {
 function register(User $user) {
     $success = FALSE;
     $con = connectToDB('cproject');
-    $array = $user->toArray();
+    $array = $user->to_array();
     $types = getTypes($array);
 
-    if (connected($con)) {
-        global $user;
+    
         //prepare an sql statement
         //because double quotes are used, the values of variables are used. No concatenation needed.
-        $prepStatement = mysqli_prepare($con, "INSERT INTO useraccount(username, pwd, fname, lname, email, gender, major_id, userstatus, per_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        //check if prepared statement was successful
-        if ($prepStatement) {
+        $prepStatement = "INSERT INTO useraccount(username, pwd, fname, lname, email, gender, major_id, userstatus, per_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $con = new Connection();
+        
             //bind parameters
-            $hash_pwd = password_hash($user->getPassword(), PASSWORD_DEFAULT);
-            mysqli_stmt_bind_param($prepStatement, $types, $user->username, $hash_pwd, $user->fname, $user->lname, $user->getEmail(), $user->gender, $user->major_id, $user->status, $user->per_id);
+            $hash_pwd = password_hash($user->get_password(), PASSWORD_DEFAULT);
+            mysqli_stmt_bind_param($prepStatement, $types, $user->username, $hash_pwd, $user->fname, $user->lname, $user->get_email(), $user->gender, $user->major_id, $user->status, $user->per_id);
             //execute prepared statement
             $success = mysqli_stmt_execute($prepStatement);
-        }
+        
         //close prepared statement
         mysqli_stmt_close($prepStatement);
-    }
+    
     return $success;
 }
 

@@ -17,7 +17,7 @@ and open the template in the editor.
         verify_login();
         
         require_once dirname(__FILE__).'/classes/User.php';
-        $user = unserializeUser($_SESSION['suser']);
+        $user = unserialize_user($_SESSION['suser']);
         getHeader($user->per_id);
         echo "Login Successful!\n Welcome $user->fname $user->lname";
         

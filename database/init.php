@@ -4,12 +4,7 @@
   ---------------------------------------------------------------------- */
 
 //constants for database connection
-define('USERNAME', 'root');
-define('PASSWORD', '');
-define('SERVER', 'localhost');
-define('CLASS_DATABASE', 'webtechclass');
-define('LAB_DATABASE', 'lab');
-define('CPROJECT_DATABASE', 'classproject2017');
+require_once 'credentials.php';
 
 /**
  * Creates a database connection and returns it.

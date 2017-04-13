@@ -8,37 +8,31 @@
 
     <body>
         <?php
-        $GLOBALS['pwdMessage'] = $GLOBALS['uMessage'] = $GLOBALS['username'] = '';
+        /*$GLOBALS['pwdMessage'] = $GLOBALS['uMessage'] = $GLOBALS['username'] = '';
         if (isset($GLOBALS['uMessage'])) {
             $uMessage = $GLOBALS['uMessage'];
         }
         if (isset($GLOBALS['pwdMessage'])) {
             $pMessage = $GLOBALS['pwdMessage'];
             $username = $GLOBALS['username'];
-        }
+        }*/
 
-        //include_once 'loginController.php';
+        include_once 'loginController.php';
         ?>
         <div class="container">  
             <form id="contact" action="loginController.php" method="post">
                 <center><h2>Login</h2></center>
                 <fieldset>
-                    <input placeholder="Username" id="uname" name="uname" type="text" tabindex="1" required <?php if (empty($pMessage)) { ?> autofocus <?php } ?> onblur="validateUsername()" value="<?php
-        if (!empty($pMessage)) {
+                    <input placeholder="Username" id="uname" name="uname" type="text" tabindex="1" required <?php if (empty($pwdMessage)) { ?> autofocus <?php } ?> onblur="validateUsername()" value="<?php
+        if (!empty($pwdMessage)) {
             echo $username;
         }
         ?>">
-                    <span id="usernameError" style="color: red">
-                        <?php
-                        if (isset($uMessage) && !empty($uMessage)) {
-                            echo $uMessage;
-                        }
-                        ?>
-                    </span>
+                    <span id="usernameError" style="color: red"><?php echo $unameMessage?></span>
                 </fieldset>
                 <fieldset>
                     <input placeholder="Password" id="pword" name="pwd" type="password" tabindex="2" required onblur="validatePassword()" <?php  ?> autofocus>
-                    <span id="passwordError" style="color: red"><?php displayPwdError(); ?></span>
+                    <span id="passwordError" style="color: red"><?php echo $pwdMessage; ?></span>
                 </fieldset>
 
                 <fieldset>

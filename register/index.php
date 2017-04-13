@@ -33,7 +33,7 @@
                     <span id="emailError"></span>
                 </fieldset>
                 <fieldset>
-                    <p>Gender:      </p>           
+                    <p><b>Gender: </b></p>           
                     Male<input type="radio" name="gender" id="genderSelect" value="Male">
                     Female<input type="radio" name="gender" id="genderSelect" value="Female"><br>
                     <span id="genderError"></span>
