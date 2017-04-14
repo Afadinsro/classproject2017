@@ -18,7 +18,10 @@ class Connection {
     private $link;
     private $result;
 
-    
+    /**
+     * Destructor function for the class
+     * Closes the mysqli link and frees the result if any exists
+     */
     function __destruct() {
         if($this->result) {
             mysqli_free_result($this->result);
@@ -82,6 +85,7 @@ class Connection {
         if ($this->connect()) {
             if($values != NULL){
                 $escaped_query = sprintf($query, ...mysqli_real_escape_string($this->link, ...$values));
+                echo $escaped_query;
             }
             $success = mysqli_query($this->link, $escaped_query);
             
