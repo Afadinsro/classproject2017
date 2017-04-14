@@ -19,6 +19,15 @@ class Connection {
     private $result;
 
     
+    function __destruct() {
+        if($this->result) {
+            mysqli_free_result($this->result);
+        }
+        if($this->link) {
+            mysqli_close($this->link);
+        }
+    }
+    
     /**
      * Connects to the database
      * @return boolean TRUE upon successful connection and FALSE if otherwise
@@ -43,7 +52,7 @@ class Connection {
      * @param mixed $values The parameters to be bound to the prepared statement
      * @return boolean
      */
-    function query(string $query, ...$values) {
+    function query(string $query, mixed ...$values) {
         $success = FALSE;
         
         //check for a valid connection
@@ -59,11 +68,25 @@ class Connection {
                 mysqli_stmt_bind_param($prepStmt, $types, ...$values);
             }
             //execute prepared statement
-            mysqli_stmt_execute($prepStmt);
+            $success = mysqli_stmt_execute($prepStmt);
             //keep result in class property
             $this->result = mysqli_stmt_get_result($prepStmt);
-            $success = TRUE;
+            
         }
+        return $success;
+    }
+    
+    function real_escape_query(string $query, mixed ...$values) {
+        $success = FALSE;
+        
+        if ($this->connect()) {
+            if($values != NULL){
+                $escaped_query = sprintf($query, ...mysqli_real_escape_string($this->link, ...$values));
+            }
+            $success = mysqli_query($this->link, $escaped_query);
+            
+        }
+        
         return $success;
     }
 
