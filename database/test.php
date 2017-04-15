@@ -9,6 +9,7 @@ include 'Connection.php';
 
 $con = new Connection();
 
-$query = "INSERT INTO users (name, gender, color) VALUES ('%s', '%s', '%s')";
-$con->real_escape_query($query, $con);
+$query = "INSERT INTO allcourses (coursecode, coursename, courseyear) VALUES ('%s', '%s', '%d')";
+$con->real_escape_query($query, "CS101", "Testcourse", 2017);
+//$con->query($query, "","");
 

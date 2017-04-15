@@ -55,7 +55,7 @@ class Connection {
      * @param mixed $values The parameters to be bound to the prepared statement
      * @return boolean
      */
-    function query(string $query, mixed ...$values) {
+    function query(string $query, ...$values) {
         $success = FALSE;
         
         //check for a valid connection
@@ -79,21 +79,47 @@ class Connection {
         return $success;
     }
     
-    function real_escape_query(string $query, mixed ...$values) {
+    /**
+     * 
+     * @param string $query
+     * @param mixed $values
+     * @return boolean
+     */
+    function real_escape_query(string $query, ...$values) {
         $success = FALSE;
+        $param_arr = NULL;
         
         if ($this->connect()) {
+            //get an array of escaped strings
+            $param_arr = $this->escape_params($values);
+        
             if($values != NULL){
-                $escaped_query = sprintf($query, ...mysqli_real_escape_string($this->link, ...$values));
-                echo $escaped_query;
+                //bind escaped strings to query
+                $escaped_query = vsprintf($query, $param_arr);
             }
             $success = mysqli_query($this->link, $escaped_query);
-            
         }
-        
         return $success;
     }
-
+    
+    /**
+     * 
+     * @param array $param_arr
+     * @return array
+     */
+    private function escape_params(Array $param_arr) {
+        $escaped_param_array = [];
+        foreach ($param_arr as $param) {
+            if(is_int($param)){
+                $escaped_param_array[] = (int)$param;
+            } elseif (is_string($param)) {
+                $escaped_param_array[] = mysqli_real_escape_string($this->link, $param);
+            }
+        }
+        return $escaped_param_array;
+    }
+    
+    
     /**
      * Gets the string representation of the data types 
      * of the values to bind dynamically to a prepared statement
