@@ -55,22 +55,15 @@ if (isset($_POST['submit'])) {
  */
 function register(User $user) {
     $success = FALSE;
-    $con = connectToDB('cproject');
-    $array = $user->to_array();
-    $types = getTypes($array);
-
-    
         //prepare an sql statement
         //because double quotes are used, the values of variables are used. No concatenation needed.
         $prepStatement = "INSERT INTO useraccount(username, pwd, fname, lname, email, gender, major_id, userstatus, per_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $con = new Connection();
-        
             //bind parameters
+        if($con) {
             $hash_pwd = password_hash($user->get_password(), PASSWORD_DEFAULT);
-            mysqli_stmt_bind_param($prepStatement, $types, $user->username, $hash_pwd, $user->fname, $user->lname, $user->get_email(), $user->gender, $user->major_id, $user->status, $user->per_id);
-            //execute prepared statement
-            $success = mysqli_stmt_execute($prepStatement);
-        
+            $success = $con->query($prepStatement, $user->username, $hash_pwd, $user->fname, $user->lname, $user->get_email(), $user->gender, $user->major_id, $user->status, $user->per_id);
+        }
         //close prepared statement
         mysqli_stmt_close($prepStatement);
     
