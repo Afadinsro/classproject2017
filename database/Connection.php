@@ -1,18 +1,14 @@
-    <?php
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-require_once 'credentials.php';
-
+<?php
 /**
  * Description of Connection
  *
  * @author afadinsro
+ * @version 1.0
  */
+
+require_once 'credentials.php';
+
+
 class Connection {
 
     private $link;
@@ -112,6 +108,8 @@ class Connection {
         foreach ($param_arr as $param) {
             if(is_int($param)){
                 $escaped_param_array[] = (int)$param;
+            } elseif (is_double($param)) {
+                $escaped_param_array[] = (double)$param;
             } elseif (is_string($param)) {
                 $escaped_param_array[] = mysqli_real_escape_string($this->link, $param);
             }
